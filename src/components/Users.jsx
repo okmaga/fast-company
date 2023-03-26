@@ -30,8 +30,8 @@ const Users = ({ users, ...rest }) => {
         <table className="table">
           <thead>
             <tr>
-              {Object.entries(columns).map((entry) => (
-                <th key={entry[0]}>{entry[1]}</th>
+              {Object.entries(columns).map(([key, value]) => (
+                <th key={key}>{value}</th>
               ))}
             </tr>
           </thead>
