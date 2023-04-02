@@ -38,7 +38,6 @@ const User = ({ user, handleDelete, handleToggleBookmark }) => {
 };
 
 User.propTypes = {
-  key: PropTypes.number.isRequired,
   user: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
