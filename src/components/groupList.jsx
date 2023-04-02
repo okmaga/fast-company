@@ -22,7 +22,7 @@ const GroupList = ({ items, valueProperty, contentProperty, onItemSelect, select
       <ul className="list-group">
         {Object.keys(items).map((item) => {
           return (<li
-            className={"list-group-item" + (JSON.stringify(items[item]) === JSON.stringify(selectedItem) ? " active" : "")}
+            className={"list-group-item" + (items[item] === selectedItem ? " active" : "")}
             key={items[item][valueProperty]}
             onClick={() => onItemSelect(items[item])}
             role="button"
