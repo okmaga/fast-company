@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import Pagination from "./pagination";
 import paginate from "../utils/paginate";
 import GroupList from "./groupList";
@@ -6,13 +7,17 @@ import api from "../api";
 import SearchStatus from "./searchStatus";
 import UserTable from "./usersTable";
 import _ from "lodash";
+import UserPage from "./userPage";
+
 const Users = () => {
+  const params = useParams();
+  const { userId } = params;
   const pageSize = 8;
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
-
+  const [userPage, setUserPage] = useState();
   const [users, setUsers] = useState();
 
   useEffect(() => {
@@ -53,6 +58,18 @@ const Users = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedProf]);
+
+  useEffect(() => {
+    setUserPage();
+  }, [userId]);
+
+  if (userId) {
+    api.users.getById(userId).then((data) => {
+      setUserPage(data);
+    });
+    return (userPage ? <UserPage user={userPage}/> : "loading...");
+  };
+
   if (users) {
     const filteredUsers = selectedProf ? users.filter(user => JSON.stringify(user.profession) === JSON.stringify(selectedProf)) : users;
     const count = filteredUsers.length;

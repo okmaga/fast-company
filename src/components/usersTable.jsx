@@ -3,10 +3,11 @@ import PropTypes from "prop-types";
 import Bookmark from "./bookmark";
 import QualitiesList from "./qualitiesList";
 import Table from "./table";
+import { Link } from "react-router-dom";
 
 const UserTable = ({ users, onSort, selectedSort, onToggleBookmark, onDelete, ...rest }) => {
   const columns = {
-    name: { path: "name", name: "Имя" },
+    name: { path: "name", name: "Имя", component: (user) => (<Link to={`/users/${user._id}`} >{user.name}</Link>) },
     qualities: { name: "Качества", component: (user) => (<QualitiesList qualities={user.qualities}/>) },
     profession: { path: "profession.name", name: "Профессия" },
     completedMeetings: { path: "completedMeetings", name: "Встретился, раз" },
@@ -35,14 +36,12 @@ const UserTable = ({ users, onSort, selectedSort, onToggleBookmark, onDelete, ..
   };
 
   return (
-    <table className="table">
-      <Table
-        onSort={onSort}
-        selectedSort={selectedSort}
-        columns={columns}
-        data={users}
-      />
-    </table>
+    <Table
+      onSort={onSort}
+      selectedSort={selectedSort}
+      columns={columns}
+      data={users}
+    />
   );
 };
 
