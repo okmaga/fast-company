@@ -3,6 +3,9 @@ import PropTypes from "prop-types";
 import QualitiesList from "./qualitiesList";
 
 const UserPage = ({ user }) => {
+  if (user.name === "User Not Found") {
+    return <h1>{user.name}</h1>;
+  }
   return (
     <div>
       <h1>{user.name}</h1>

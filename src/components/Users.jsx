@@ -65,7 +65,11 @@ const Users = () => {
 
   if (userId) {
     api.users.getById(userId).then((data) => {
-      setUserPage(data);
+      if (data) {
+        setUserPage(data);
+      } else {
+        setUserPage({ name: "User Not Found" });
+      };
     });
     return (userPage ? <UserPage user={userPage}/> : "loading...");
   };
