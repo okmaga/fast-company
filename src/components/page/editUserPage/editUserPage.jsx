@@ -6,11 +6,19 @@ import SelectField from "../../common/form/selectField";
 import { useHistory } from "react-router-dom";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
+import { validator } from "../../../utils/validator";
 const EditUserPage = ({ userId }) => {
   const [user, setUser] = useState();
   const [professions, setProfessions] = useState();
   const [qualities, setQualities] = useState({});
+  const [errors, setErrors] = useState([]);
   const history = useHistory();
+  const validatorConfig = {
+    email: {
+      isRequired: { message: "Электронная почта обязательна для заполнения" },
+      isEmail: { message: "Укажите электронную почту" }
+    }
+  };
   useEffect(() => {
     api.users.getById(userId).then((data) => setUser(data));
   }, []);
@@ -33,7 +41,14 @@ const EditUserPage = ({ userId }) => {
   }, []);
   useEffect(() => {
     console.log(user);
+    validate();
   }, [user]);
+
+  const validate = () => {
+    const errors = validator(user, validatorConfig);
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
   const getProfessionById = (id) => {
     for (const prof of professions) {
       if (prof.value === id) {
@@ -76,8 +91,12 @@ const EditUserPage = ({ userId }) => {
         : value;
     setUser((prev) => ({ ...prev, [name]: newValue }));
   };
+
+  const isValid = Object.keys(errors).length === 0;
   const handleSubmit = (e) => {
     e.preventDefault();
+    const isValid = validate();
+    if (!isValid) return;
     api.users.update(userId, user);
     history.push(`/users/${userId}`);
   };
@@ -98,6 +117,7 @@ const EditUserPage = ({ userId }) => {
                 name="email"
                 value={user.email}
                 onChange={handleChange}
+                error={errors.email}
               />
               <SelectField
                 label="Выберите вашу профессию"
@@ -122,7 +142,9 @@ const EditUserPage = ({ userId }) => {
               />
               <button
                 type="submit"
-                className="btn btn-primary w-100 mx-auto">Обновить</button>
+                className="btn btn-primary w-100 mx-auto"
+                disabled={!isValid}
+              >Обновить</button>
             </form>
           </div>
         </div>
