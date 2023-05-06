@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "./pagination";
-import paginate from "../utils/paginate";
-import GroupList from "./groupList";
-import api from "../api";
-import SearchStatus from "./searchStatus";
-import UserTable from "./usersTable";
+import Pagination from "../../common/pagination";
+import paginate from "../../../utils/paginate";
+import GroupList from "../../common/groupList";
+import api from "../../../api";
+import SearchStatus from "../../ui/searchStatus";
+import UserTable from "../../ui/usersTable";
 import _ from "lodash";
-import SearchBar from "./searchBar";
+import SearchBar from "../../ui/searchBar";
 
-const UsersList = () => {
+const UsersListPage = () => {
   const pageSize = 8;
   const [currentPage, setCurrentPage] = useState(1);
   const [professions, setProfessions] = useState();
@@ -57,7 +57,7 @@ const UsersList = () => {
     setCurrentPage(1);
   }, [selectedProf]);
 
-  const handleSearch = ({ target }) => {
+  const handleSearch = (target) => {
     const query = target.value.toString().toLowerCase();
     setSelectedProf();
     setSearchQuery(query);
@@ -114,4 +114,4 @@ const UsersList = () => {
   return "loading...";
 };
 
-export default UsersList;
+export default UsersListPage;

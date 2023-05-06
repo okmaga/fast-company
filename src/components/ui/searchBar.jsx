@@ -1,5 +1,5 @@
 import React from "react";
-import TextField from "./textField";
+import TextField from "../common/form/textField";
 import PropTypes from "prop-types";
 
 const SearchBar = ({ onChange, value }) => {
@@ -10,7 +10,7 @@ const SearchBar = ({ onChange, value }) => {
       name="search"
       onChange={onChange}
       value={value}
-    ></TextField>
+    />
   );
 };
 
