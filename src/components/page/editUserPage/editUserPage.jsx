@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import { validator } from "../../../utils/validator";
+import BackHistoryButton from "../../common/backButton";
 const EditUserPage = ({ userId }) => {
   const [user, setUser] = useState();
   const [professions, setProfessions] = useState();
@@ -103,8 +104,9 @@ const EditUserPage = ({ userId }) => {
   if (user && professions) {
     return (
       <div className="container mt-5">
+        <BackHistoryButton />
         <div className="row">
-          <div className="col-md-10 .offset-md-1 shadow p-4 mx-auto">
+          <div className="col-md-6 .offset-md-1 shadow p-4 mx-auto">
             <form onSubmit={handleSubmit}>
               <TextField
                 label="Имя"
