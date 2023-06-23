@@ -14,6 +14,7 @@ const RegisterForm = () => {
   const history = useHistory();
   const [data, setData] = useState({
     email: "",
+    name: "",
     password: "",
     profession: "",
     sex: "male",
@@ -27,7 +28,6 @@ const RegisterForm = () => {
   const { professions } = useProfessions();
   const professionsList = professions.map(p => ({ label: p.name, value: p._id }));
   const handleChange = (target) => {
-    console.log(target);
     setData((prevState) => ({
       ...prevState,
       [target.name]: target.value
@@ -37,6 +37,10 @@ const RegisterForm = () => {
     email: {
       isRequired: { message: "Электронная почта обязательна для заполнения" },
       isEmail: { message: "Укажите электронную почту" }
+    },
+    name: {
+      isRequired: { message: "Имя обязательно для заполнения" },
+      min: { message: "Имя не может быть менее 3 символов", value: 3 }
     },
     password: {
       isRequired: { message: "Пароль обязателен для заполнения" },
@@ -88,6 +92,13 @@ const RegisterForm = () => {
           value={data.email}
           onChange={handleChange}
           error={errors.email}
+        />
+        <TextField
+          label="Имя"
+          name="name"
+          value={data.name}
+          onChange={handleChange}
+          error={errors.name}
         />
         <TextField
           label="Пароль"

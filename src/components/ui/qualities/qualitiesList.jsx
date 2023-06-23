@@ -3,19 +3,13 @@ import PropTypes from "prop-types";
 import Quality from "./qualities";
 import { useQuality } from "../../../hooks/useQuality";
 
-const QualitiesList = ({ qualitiesArray }) => {
-  const { isLoading, qualities } = useQuality();
-  const qualitiesToRender = qualities.filter(quality => qualitiesArray.includes(quality._id));
+const QualitiesList = ({ qualities }) => {
+  const { isLoading } = useQuality();
   if (!isLoading) {
     return (
       <>
-        {qualitiesToRender.map((quality) => (
-          <Quality
-            _id={quality._id}
-            name={quality.name}
-            key={quality._id}
-            color={quality.color}
-          />
+        {qualities.map((quality) => (
+          <Quality key={quality} id={quality} />
         ))}
       </>
     );
@@ -25,6 +19,6 @@ const QualitiesList = ({ qualitiesArray }) => {
 };
 
 QualitiesList.propTypes = {
-  qualitiesArray: PropTypes.array
+  qualities: PropTypes.array
 };
 export default QualitiesList;

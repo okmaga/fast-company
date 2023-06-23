@@ -8,7 +8,6 @@ const TextareaField = ({ name, value, label, onChange, error }) => {
   const getInputClasses = () => {
     return "form-control" + (error ? " is-invalid" : "");
   };
-  console.log(error);
   return (
     <div className="mb-4">
       <label htmlFor={name}>{label}</label>

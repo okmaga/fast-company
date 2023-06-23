@@ -39,8 +39,12 @@ export const QualityProvider = ({ children }) => {
     setError(message);
   };
 
+  function getQualityById(id) {
+    return qualities.find(q => q._id === id);
+  };
+
   return (
-    <QualityContext.Provider value={{ isLoading, qualities }}>
+    <QualityContext.Provider value={{ isLoading, qualities, getQualityById }}>
       {children}
     </QualityContext.Provider>
   );
