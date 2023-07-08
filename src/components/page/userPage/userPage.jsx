@@ -6,13 +6,14 @@ import MeetingsCard from "../../ui/meetingsCard";
 import { useUser } from "../../../hooks/useUsers";
 import { CommentsProvider } from "../../../hooks/useComments";
 import Comments from "../../ui/comments";
-import { useProfessions } from "../../../hooks/useProfession";
+import { useSelector } from "react-redux";
+import { getProfession } from "../../../store/professions";
 
 const UserPage = ({ userId }) => {
   const { getUserById } = useUser();
   const user = getUserById(userId);
-  const { getProfession } = useProfessions();
-  const userWithProf = { ...user, profession: getProfession(user.profession) };
+  const profession = useSelector(getProfession(user.profession));
+  const userWithProf = { ...user, profession };
 
   if (userWithProf) {
     return (
