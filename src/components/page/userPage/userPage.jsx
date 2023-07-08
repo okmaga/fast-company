@@ -6,18 +6,22 @@ import MeetingsCard from "../../ui/meetingsCard";
 import { useUser } from "../../../hooks/useUsers";
 import { CommentsProvider } from "../../../hooks/useComments";
 import Comments from "../../ui/comments";
+import { useProfessions } from "../../../hooks/useProfession";
 
 const UserPage = ({ userId }) => {
   const { getUserById } = useUser();
   const user = getUserById(userId);
-  if (user) {
+  const { getProfession } = useProfessions();
+  const userWithProf = { ...user, profession: getProfession(user.profession) };
+
+  if (userWithProf) {
     return (
       <div className="container">
         <div className="row gutters-sm">
           <div className="col-md-4 mb-3">
-            <UserCard user={user} />
-            <QualitiesCard data={user.qualities}/>
-            <MeetingsCard value={user.completedMeetings}/>
+            <UserCard user={userWithProf} />
+            <QualitiesCard data={userWithProf.qualities}/>
+            <MeetingsCard value={userWithProf.completedMeetings}/>
           </div>
           <div className="col-md-8">
             <CommentsProvider>

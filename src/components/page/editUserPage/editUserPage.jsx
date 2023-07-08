@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Redirect, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
@@ -7,26 +7,22 @@ import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
 import { useUser } from "../../../hooks/useUsers";
 import { useProfessions } from "../../../hooks/useProfession";
-import { useQuality } from "../../../hooks/useQuality";
 import { useAuth } from "../../../hooks/useAuth";
 import { validator } from "../../../utils/validator";
+import { useSelector } from "react-redux";
+import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
 
 const EditUserPage = () => {
   const { userId } = useParams();
-  const { editUser, currentUser } = useAuth();
+  const { updateUser } = useAuth();
   const { getUserById } = useUser();
   const user = getUserById(userId);
+  const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const { professions, isLoading: professionsLoading } = useProfessions();
-  const { qualities, isLoading: qualitiesLoading } = useQuality();
-  const [data, setData] = useState({
-    name: "",
-    email: "",
-    profession: "",
-    sex: "male",
-    qualities: []
-  });
+  const qualities = useSelector(getQualities());
+  const qualitiesLoading = useSelector(getQualitiesLoadingStatus());
 
   const validatorConfig = {
     email: {
@@ -77,7 +73,7 @@ const EditUserPage = () => {
       ...data,
       qualities: data.qualities.map(({ value }) => value)
     };
-    editUser(payload);
+    updateUser(payload);
   };
 
   useEffect(() => {
@@ -92,9 +88,6 @@ const EditUserPage = () => {
 
   const isValid = Object.keys(errors).length === 0;
 
-  if (userId !== currentUser._id) {
-    return <Redirect to={`/users/${currentUser._id}/edit`} />;
-  };
   return (
     <div className="container mt-5">
       <BackHistoryButton />
