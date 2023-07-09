@@ -9,10 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professions";
 import { getCurrentUserData, updateUser } from "../../../store/users";
-import { useHistory } from "react-router-dom";
 
 const EditUserPage = () => {
-  const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState();
   const currentUser = useSelector(getCurrentUserData());
@@ -73,7 +71,6 @@ const EditUserPage = () => {
       qualities: data.qualities.map(({ value }) => value)
     };
     dispatch(updateUser(payload));
-    history.push(`/${currentUser._id}`);
   };
 
   useEffect(() => {
