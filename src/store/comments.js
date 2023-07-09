@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice } from "@reduxjs/toolkit";
 import commentService from "../services/comment.service";
 
 const commentsSlice = createSlice({
@@ -19,12 +19,29 @@ const commentsSlice = createSlice({
     commentsRequestFailed: (state, action) => {
       state.error = action.payload;
       state.isLoading = false;
+    },
+    commentCreated: (state, action) => {
+      state.entities.push(action.payload);
+    },
+    commentRemoved: (state, action) => {
+      state.entities = state.entities.filter(c => c._id !== action.payload);
     }
   }
 });
 
 const { reducer: commentsReducer, actions } = commentsSlice;
-const { commentsRequested, commentsReceived, commentsRequestFailed } = actions;
+const {
+  commentsRequested,
+  commentsReceived,
+  commentsRequestFailed,
+  commentCreated,
+  commentRemoved
+} = actions;
+
+const commentCreateRequested = createAction("comments/commentCreateRequested");
+const commentCreateFailed = createAction("comments/commentCreateFailed");
+const commentDeleteRequested = createAction("comments/commentDeleteRequested");
+const commentDeleteFailed = createAction("comments/commentDeleteFailed");
 
 export const loadCommentsList = (userId) => async (dispatch) => {
   dispatch(commentsRequested());
@@ -33,6 +50,28 @@ export const loadCommentsList = (userId) => async (dispatch) => {
     dispatch(commentsReceived(content));
   } catch (error) {
     dispatch(commentsRequestFailed(error.message));
+  }
+};
+
+export const createComment = (payload) => async (dispatch) => {
+  dispatch(commentCreateRequested());
+  try {
+    const { content } = await commentService.createComment(payload);
+    dispatch(commentCreated(content));
+  } catch (error) {
+    dispatch(commentCreateFailed(error.message));
+  };
+};
+
+export const removeComment = (id) => async (dispatch) => {
+  dispatch(commentDeleteRequested());
+  try {
+    const { content } = await commentService.removeComment(id);
+    if (content === null) {
+      dispatch(commentRemoved(id));
+    };
+  } catch (error) {
+    dispatch(commentDeleteFailed(error.message));
   }
 };
 
