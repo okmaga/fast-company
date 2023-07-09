@@ -6,22 +6,20 @@ import SearchStatus from "../../ui/searchStatus";
 import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import SearchBar from "../../ui/searchBar";
-import { useUser } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
 import { useSelector } from "react-redux";
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professions";
+import { getCurrentUserId, getUsersList } from "../../../store/users";
 
 const UsersListPage = () => {
+  const users = useSelector(getUsersList());
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
-  const { currentUser } = useAuth();
+  const currentUserId = useSelector(getCurrentUserId());
   const pageSize = 8;
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProf, setSelectedProf] = useState();
   const [sortBy, setSortBy] = useState({ path: "name", order: "asc" });
   const [searchQuery, setSearchQuery] = useState("");
-
-  const { users } = useUser();
 
   const handleDelete = (userId) => {
     // setUsers((prev) => prev.filter((user) => user._id !== userId));
@@ -70,7 +68,7 @@ const UsersListPage = () => {
           : searchQuery
             ? data.filter(user => user.name.toString().toLowerCase().includes(searchQuery))
             : data;
-      return filteredUsers.filter(user => user._id !== currentUser._id);
+      return filteredUsers.filter(user => user._id !== currentUserId);
     };
     const filteredUsers = filterUsers(users);
     const count = filteredUsers.length;

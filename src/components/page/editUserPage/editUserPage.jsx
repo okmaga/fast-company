@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import TextField from "../../common/form/textField";
 import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radioField";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
-import { useUser } from "../../../hooks/useUsers";
-import { useAuth } from "../../../hooks/useAuth";
 import { validator } from "../../../utils/validator";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getQualities, getQualitiesLoadingStatus } from "../../../store/qualities";
 import { getProfessions, getProfessionsLoadingStatus } from "../../../store/professions";
+import { getCurrentUserData, updateUser } from "../../../store/users";
+import { useHistory } from "react-router-dom";
 
 const EditUserPage = () => {
-  const { userId } = useParams();
-  const { updateUser } = useAuth();
-  const { getUserById } = useUser();
-  const user = getUserById(userId);
-  const [data, setData] = useState();
+  const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState();
+  const currentUser = useSelector(getCurrentUserData());
+  const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const professions = useSelector(getProfessions());
   const professionsLoading = useSelector(getProfessionsLoadingStatus());
@@ -43,12 +41,12 @@ const EditUserPage = () => {
 
   useEffect(() => {
     if (!professionsLoading && !qualitiesLoading) {
-      const transformedQualities = user.qualities.map(quality => {
+      const transformedQualities = currentUser.qualities.map(quality => {
         const { _id, name, ...rest } = qualities.find(q => q._id === quality);
         return { value: _id, label: name, ...rest };
       });
       setData({
-        ...user,
+        ...currentUser,
         qualities: transformedQualities
       });
       setIsLoading(false);
@@ -74,7 +72,8 @@ const EditUserPage = () => {
       ...data,
       qualities: data.qualities.map(({ value }) => value)
     };
-    updateUser(payload);
+    dispatch(updateUser(payload));
+    history.push(`/${currentUser._id}`);
   };
 
   useEffect(() => {
