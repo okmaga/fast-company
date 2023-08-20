@@ -1,4 +1,3 @@
-
 export function validator(data, config) {
   const errors = {};
   function validate(validateMethod, data, config) {
